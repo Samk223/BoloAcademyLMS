@@ -1,0 +1,11 @@
+# Root-level ignores
+.env
+.env.backup
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Any root level node_modules or vendor folders if they exist
+node_modules/
+vendor/

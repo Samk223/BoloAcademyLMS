@@ -1,0 +1,8 @@
+# Ignore environment variables
+.env
+.env.backup
+.env.local
+
+# Ignore Supabase local dev specific files (if running supabase locally)
+.supabase/
+!.supabase/config.toml
