@@ -75,8 +75,8 @@ class StudentDashboardController extends Controller
             ->selectRaw("
                 COUNT(*) as total_count,
                 SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed_count,
-                SUM(CASE WHEN DATE(created_at) = ? THEN 1 ELSE 0 END) as total_today_count,
-                SUM(CASE WHEN DATE(submitted_at) = ? AND status = 'completed' THEN 1 ELSE 0 END) as completed_today_count
+                SUM(CASE WHEN CAST(created_at AS date) = ? THEN 1 ELSE 0 END) as total_today_count,
+                SUM(CASE WHEN CAST(submitted_at AS date) = ? AND status = 'completed' THEN 1 ELSE 0 END) as completed_today_count
             ", [now()->toDateString(), now()->toDateString()])
             ->first();
 
@@ -245,8 +245,8 @@ class StudentDashboardController extends Controller
             ->selectRaw("
                 COUNT(*) as total_count,
                 SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed_count,
-                SUM(CASE WHEN DATE(created_at) = ? THEN 1 ELSE 0 END) as total_today_count,
-                SUM(CASE WHEN DATE(submitted_at) = ? AND status = 'completed' THEN 1 ELSE 0 END) as completed_today_count
+                SUM(CASE WHEN CAST(created_at AS date) = ? THEN 1 ELSE 0 END) as total_today_count,
+                SUM(CASE WHEN CAST(submitted_at AS date) = ? AND status = 'completed' THEN 1 ELSE 0 END) as completed_today_count
             ", [now()->toDateString(), now()->toDateString()])
             ->first();
 
