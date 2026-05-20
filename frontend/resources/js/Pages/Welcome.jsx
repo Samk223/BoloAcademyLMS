@@ -262,7 +262,7 @@ export default function Welcome({ auth }) {
 
     // Load available batches from API
     useEffect(() => {
-        fetch(route('api.batches'))
+        fetch('/api/batches')
             .then(res => res.json())
             .then(data => setBatches(data))
             .catch(err => console.error('Failed to load batches:', err));
