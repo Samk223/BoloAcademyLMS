@@ -20,6 +20,9 @@ Route::get("/", function () {
 });
 
 // Public Onboarding Routes
+Route::get('/api/health', function () {
+    return response()->json(['status' => 'ok', 'timestamp' => now()->toIso8601String()]);
+});
 Route::get('/api/batches', [OnboardingController::class, 'getAvailableBatches'])->name('api.batches');
 Route::post('/student/checkout', [OnboardingController::class, 'checkoutStudent'])->name('student.checkout');
 Route::post('/teacher/apply', [OnboardingController::class, 'applyTeacher'])->name('teacher.apply');
