@@ -66,7 +66,7 @@ export default function AICreator({ type }) {
     setIsGenerating(true);
 
     try {
-      const response = await axios.post(route('teacher.generate'), {
+      const response = await axios.post('/teacher/generate', {
         type: type,
         prompt: input || `Generate a ${type} based on the uploaded document.`,
         context: context,
@@ -95,7 +95,7 @@ export default function AICreator({ type }) {
 
   const saveCreation = async () => {
     try {
-      await axios.post(route('teacher.save'), {
+      await axios.post('/teacher/save-creation', {
         type: type,
         title: `${type.charAt(0).toUpperCase() + type.slice(1)}: ${new Date().toLocaleDateString()}`,
         content: generatedContent,

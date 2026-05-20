@@ -479,7 +479,7 @@ export default function StudentDashboard({ auth, initialData }) {
                 e.preventDefault();
                 setIsProcessing(true);
                 try {
-                  const res = await axios.post(route('student.payment.settle'));
+                  const res = await axios.post('/student/payment/settle');
                   if (res.data.status === 'success') {
                     setPaymentSuccess(true);
                     showToast("Payment received successfully! 🌟");

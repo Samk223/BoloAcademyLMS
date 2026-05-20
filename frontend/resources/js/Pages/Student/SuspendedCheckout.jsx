@@ -49,7 +49,7 @@ export default function SuspendedCheckout({ student, programFee }) {
         setLoading(true);
 
         try {
-            const response = await fetch(route('student.payment.settle'), {
+            const response = await fetch('/student/payment/settle', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export default function SuspendedCheckout({ student, programFee }) {
             if (data.status === 'success') {
                 setSuccess(true);
                 setTimeout(() => {
-                    window.location.href = route('dashboard');
+                    window.location.href = '/dashboard';
                 }, 2000);
             } else {
                 alert('Payment processing failed. Please try again.');

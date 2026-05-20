@@ -237,7 +237,7 @@ export default function Login({ status, canResetPassword }) {
                 if (resData.is_logged_in) {
                     setGoogleSuccess('Google Account verified! Logging you in...');
                     setTimeout(() => {
-                        window.location.href = route('dashboard');
+                        window.location.href = '/dashboard';
                     }, 800);
                 } else {
                     setGoogleSuccess('Google Account verified, but no account exists yet! Let\'s sign you up.');

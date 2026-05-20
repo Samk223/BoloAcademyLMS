@@ -244,7 +244,7 @@ export default function Register() {
                 if (resData.is_logged_in) {
                     setGoogleSuccess('Google Account verified! Logging you in...');
                     setTimeout(() => {
-                        window.location.href = route('dashboard');
+                        window.location.href = '/dashboard';
                     }, 800);
                 } else {
                     setGoogleSuccess('Google Account authenticated! Pre-populating form...');
