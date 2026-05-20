@@ -6,18 +6,22 @@ use App\Models\Creation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class AIController extends Controller
+class AIController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware(function ($request, $next) {
-            $user = auth()->user();
-            if ($user && $user->role === 'teacher' && ($user->status === 'pending' || $user->status === 'rejected')) {
-                abort(403, 'Unauthorized status.');
-            }
-            return $next($request);
-        });
+        return [
+            new Middleware(function ($request, $next) {
+                $user = auth()->user();
+                if ($user && $user->role === 'teacher' && ($user->status === 'pending' || $user->status === 'rejected')) {
+                    abort(403, 'Unauthorized status.');
+                }
+                return $next($request);
+            }),
+        ];
     }
 
     public function creator(Request $request, $type)
