@@ -22,6 +22,17 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+        <!-- Pusher Config injection for Realtime Chat/Polls/Quizzes -->
+        <script>
+            window.pusherConfig = {
+                key: "{{ config('broadcasting.connections.pusher.key') }}" || null,
+                cluster: "{{ config('broadcasting.connections.pusher.options.cluster') }}" || null,
+                host: "{{ config('broadcasting.connections.pusher.options.host') }}" || null,
+                port: "{{ config('broadcasting.connections.pusher.options.port') }}" || null,
+                scheme: "{{ config('broadcasting.connections.pusher.options.scheme') }}" || null
+            };
+        </script>
+
         <!-- Scripts -->
         @routes
         @viteReactRefresh

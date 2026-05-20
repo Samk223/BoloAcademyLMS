@@ -2,10 +2,12 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
 export function createEcho() {
-  const key = import.meta.env.VITE_PUSHER_APP_KEY;
-  const host = import.meta.env.VITE_PUSHER_HOST;
-  const port = import.meta.env.VITE_PUSHER_PORT;
-  const scheme = import.meta.env.VITE_PUSHER_SCHEME || 'https';
+  const config = window.pusherConfig || {};
+  const key = config.key || import.meta.env.VITE_PUSHER_APP_KEY;
+  const host = config.host || import.meta.env.VITE_PUSHER_HOST;
+  const port = config.port || import.meta.env.VITE_PUSHER_PORT;
+  const scheme = config.scheme || import.meta.env.VITE_PUSHER_SCHEME || 'https';
+  const cluster = config.cluster || import.meta.env.VITE_PUSHER_APP_CLUSTER;
 
   if (!key) return null;
 
@@ -14,7 +16,7 @@ export function createEcho() {
   const options = {
     broadcaster: 'pusher',
     key,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    cluster,
     forceTLS: scheme === 'https',
     enabledTransports: ['ws', 'wss'],
   };
