@@ -261,7 +261,7 @@ class AdminPortalController extends Controller
         }
 
         if ($teacherStatus !== '') {
-            $dbStatus = strtolower($teacherStatus) === 'pending approval' ? 'pending' : (strtolower($teacherStatus) === 'rejected' ? 'rejected' : 'approved');
+            $dbStatus = strtolower($teacherStatus) === 'pending approval' ? 'pending' : (strtolower($teacherStatus) === 'rejected' ? 'rejected' : (strtolower($teacherStatus) === 'suspended' ? 'suspended' : 'approved'));
             $teacherQuery->where('status', $dbStatus);
         }
 
@@ -277,7 +277,7 @@ class AdminPortalController extends Controller
             $dailyClasses = CourseClass::where('teacher_id', $teacher->id)->whereDate('scheduled_at', now())->count();
             $teacherStudents = Student::where('teacher_id', $teacher->id)->get();
             
-            $status = $teacher->status === 'pending' ? 'Pending Approval' : ($teacher->status === 'rejected' ? 'Rejected' : 'Active');
+            $status = $teacher->status === 'pending' ? 'Pending Approval' : ($teacher->status === 'rejected' ? 'Rejected' : ($teacher->status === 'suspended' ? 'Suspended' : 'Active'));
 
             return [
                 'id' => $teacher->id,
@@ -2079,11 +2079,14 @@ class AdminPortalController extends Controller
      */
     public function deleteTeacher(Request $request, User $user)
     {
-        Student::where('teacher_id', $user->id)->update(['teacher_id' => null]);
+        $leadTeacher = User::where('role', 'teacher')->first();
+        $fallbackId = $leadTeacher ? $leadTeacher->id : 1;
+
+        Student::where('teacher_id', $user->id)->update(['teacher_id' => $fallbackId]);
         Batch::where('teacher_id', $user->id)->update(['teacher_id' => null]);
         CourseClass::where('teacher_id', $user->id)->delete();
         $user->delete();
 
-        return redirect()->back()->with('success', 'Teacher and related classes deleted.');
+        return redirect()->back()->with('success', 'Teacher deleted and related students reassigned.');
     }
 }

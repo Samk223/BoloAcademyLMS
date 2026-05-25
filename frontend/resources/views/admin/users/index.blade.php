@@ -136,6 +136,7 @@
                         <option value="Active" @selected($teacherStatus === 'Active')>Active</option>
                         <option value="Pending Approval" @selected($teacherStatus === 'Pending Approval')>Pending Approval</option>
                         <option value="Rejected" @selected($teacherStatus === 'Rejected')>Rejected</option>
+                        <option value="Suspended" @selected($teacherStatus === 'Suspended')>Suspended</option>
                     </select>
                     <select name="teacher_sort" class="rounded-full border-[3px] border-[#1E1E1E] bg-white px-4 py-3 text-sm font-bold focus:border-[#1E1E1E] focus:ring-0">
                         <option value="created_at" @selected($teacherSort === 'created_at')>Newest</option>
@@ -167,7 +168,7 @@
                 <tbody>
                     @forelse($teachers as $teacher)
                         @php
-                            $statusTone = $teacher['status'] === 'Rejected' ? 'danger' : ($teacher['status'] === 'Pending Approval' ? 'warning' : 'success');
+                            $statusTone = $teacher['status'] === 'Rejected' ? 'danger' : ($teacher['status'] === 'Pending Approval' ? 'warning' : ($teacher['status'] === 'Suspended' ? 'dark' : 'success'));
                         @endphp
                         <tr class="rounded-[1.5rem] border-[3px] border-[#1E1E1E] bg-white shadow-[3px_3px_0px_0px_#1E1E1E]">
                             <td class="rounded-l-[1.5rem] px-4 py-4 text-sm font-black">{{ $teacher['teacher_code'] }}</td>
