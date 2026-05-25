@@ -1693,15 +1693,17 @@ class AdminPortalController extends Controller
         // 4. Send approval email notifying the teacher
         try {
             $meetingLink = $user->meeting_link ?: 'your registered Google Meet link';
-            \Illuminate\Support\Facades\Mail::raw(
-                "Hello {$user->name},\n\nWelcome to Bolo Academy! 🎉\n\nWe are pleased to inform you that your application to teach at Bolo Academy has been approved. Your mentor portal is now fully active.\n\nWhat happens next?\nThe founder of the academy will have a brief conversation with you soon through your Google Meet link ({$meetingLink}). The exact timing of this meeting will be notified to you via email shortly.\n\nGetting started:\nYou can now log in to your account at " . url('/login') . " to access your teacher dashboard, manage classes, and view student progress.\n\nCongratulations and welcome to the team!\n\nBest regards,\nBolo Academy Administration", 
-                function ($message) use ($user) {
-                    $message->to($user->email)
-                        ->subject("Bolo Academy - Mentor Application Approved! 🎉");
-                }
-            );
+            dispatch(function () use ($user, $meetingLink) {
+                \Illuminate\Support\Facades\Mail::raw(
+                    "Hello {$user->name},\n\nWelcome to Bolo Academy! 🎉\n\nWe are pleased to inform you that your application to teach at Bolo Academy has been approved. Your mentor portal is now fully active.\n\nWhat happens next?\nThe founder of the academy will have a brief conversation with you soon through your Google Meet link ({$meetingLink}). The exact timing of this meeting will be notified to you via email shortly.\n\nGetting started:\nYou can now log in to your account at " . url('/login') . " to access your teacher dashboard, manage classes, and view student progress.\n\nCongratulations and welcome to the team!\n\nBest regards,\nBolo Academy Administration", 
+                    function ($message) use ($user) {
+                        $message->to($user->email)
+                            ->subject("Bolo Academy - Mentor Application Approved! 🎉");
+                    }
+                );
+            })->afterResponse();
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error("Approval Mail sending failed: " . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Mail sending failed: ' . $e->getMessage());
         }
 
         return redirect()->back()->with('success', 'Teacher approved successfully.');
@@ -1841,15 +1843,17 @@ class AdminPortalController extends Controller
 
         // 3. Send email notifying the teacher
         try {
-            \Illuminate\Support\Facades\Mail::raw(
-                "Hello {$user->name},\n\nThank you for applying as a teacher mentor at Bolo Academy.\n\nAfter reviewing your profile and resume, we regret to inform you that our current requirements do not match your CV/profile. Therefore, we are unable to proceed with your application at this time.\n\nWe appreciate your interest in Bolo Academy and wish you the best in your future endeavors.\n\nBest regards,\nBolo Academy Administration", 
-                function ($message) use ($user) {
-                    $message->to($user->email)
-                        ->subject("Bolo Academy - Mentor Application Status Update");
-                }
-            );
+            dispatch(function () use ($user) {
+                \Illuminate\Support\Facades\Mail::raw(
+                    "Hello {$user->name},\n\nThank you for applying as a teacher mentor at Bolo Academy.\n\nAfter reviewing your profile and resume, we regret to inform you that our current requirements do not match your CV/profile. Therefore, we are unable to proceed with your application at this time.\n\nWe appreciate your interest in Bolo Academy and wish you the best in your future endeavors.\n\nBest regards,\nBolo Academy Administration", 
+                    function ($message) use ($user) {
+                        $message->to($user->email)
+                            ->subject("Bolo Academy - Mentor Application Status Update");
+                    }
+                );
+            })->afterResponse();
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error("Mail sending failed: " . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Mail sending failed: ' . $e->getMessage());
         }
 
         return redirect()->back()->with('success', 'Teacher application rejected.');
